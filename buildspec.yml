@@ -1,0 +1,19 @@
+version: 0.2
+
+phases:
+
+  build:
+    commands:
+      - echo Build started on `date`
+      #- ./gradlew --debug --stacktrace build
+      - chmod +x gradlew
+      - ./gradlew assembleDebug
+      #- ./gradlew.bat assembleDebug
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - aws devicefarm create-upload --project-arn "arn:aws:devicefarm:us-west-2:127566284696:project:3bda08e1-237e-4ddc-9dba-1fe111f3db15" --name app/build/outputs/apk/debug/app-debug.apk --type ANDROID_APP
+artifacts:
+  files:
+    #- target/aws-code-build-android.jar
+    - app/build/outputs/apk/debug/app-debug.apk
